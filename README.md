@@ -1,6 +1,6 @@
 # Wii Pi Cam Controller
 
-## Purpose
+## Synopsis
 
 ## Equipment List
 
