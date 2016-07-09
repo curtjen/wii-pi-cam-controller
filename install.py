@@ -4,7 +4,7 @@ import os
 
 # Install gphoto2
 print "Installing gphoto2..."
-os.system("wget https://raw.githubusercontent.com/curtjen/gphoto2-updater/master/gphoto2-updater.sh && chmod +x gphoto2-updater.sh && sudo ./gphoto2-updater.sh")
+os.system("wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh && chmod +x gphoto2-updater.sh && sudo ./gphoto2-updater.sh")
 
 # Install Wiimote drivers
 print "Installing Wii drivers..."
