@@ -15,14 +15,27 @@ mode = 'movie'
 print 'Connecting camera....'
 
 def cam_connect():
-    camSummary = subprocess.Popen(['gphoto2', '--summary'], stdout=subprocess.PIPE)
-    camOutput = camSummary.stdout.read()
+    getSummary = subprocess.Popen(['gphoto2', '--summary'], stdout=subprocess.PIPE)
+    camOutput = getSummary.stdout.read()
     searchObj = re.search( r'error', camOutput, re.M|re.I )
 
     if searchObj:
         print 'Camera not connected...'
     else:
-        print 'Camera connected successfully'
+        set_capturetarget()
+        print "Camera connected successfully"
+
+
+def set_capturetarget():
+    getCaptureTarget = subprocess.Popen(['gphoto2', '--get-config', 'capturetarget'], stdout=subprocess.PIPE)
+    camOutput = getCaptureTarget.stdout.read()
+    searchObj = re.search( r'Current: Memory card', camOutput, re.M|re.I )
+
+    if not searchObj:
+        os.system('gphoto2 --set-config capturetarget=1')
+        print "gphoto2 capturetarget set to Memory card"
+    else:
+        print "gphoto2 capturetarget already set to Memory card"
 
 
 def change_setting(setting, upDown):
@@ -90,9 +103,8 @@ def toggle_mode(m):
 
 
 def movie_start_stop():
-    # Stop video
-    stopMovie = subprocess.Popen(['gphoto2', '--get-config', 'movierecordtarget'], stdout=subprocess.PIPE)
-    stopMovieStatus = stopMovie.stdout.read()
+    getMovieRecordTarget = subprocess.Popen(['gphoto2', '--get-config', 'movierecordtarget'], stdout=subprocess.PIPE)
+    stopMovieStatus = getMovieRecordTarget.stdout.read()
     searchObj = re.search( r'Current: Card', stopMovieStatus, re.M|re.I )
 
     # If video is already recording then stop
