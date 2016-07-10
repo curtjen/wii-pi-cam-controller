@@ -88,6 +88,21 @@ def toggle_mode(m):
     print "Mode set to: %s" % mode
     # return mode
 
+
+def movie_start_stop():
+    # Stop video
+    stopMovie = subprocess.Popen(['gphoto2', '--get-config', 'movierecordtarget'], stdout=subprocess.PIPE)
+    stopMovieStatus = stopMovie.stdout.read()
+    searchObj = re.search( r'Current: Card', stopMovieStatus, re.M|re.I )
+
+    # If video is already recording then stop
+    if (searchObj):
+        os.system('gphoto2 --set-config movierecordtarget=None')
+    # Else start recording
+    else:
+        os.system('gphoto2 --set-config viewfinder=1 --set-config movierecordtarget=Card')
+
+
 try:
     camera = cam_connect()
 except RuntimeError:
@@ -165,16 +180,7 @@ while True:
 
     if (buttons & cwiid.BTN_A):
         if mode == 'movie':
-            # Stop video
-            stopMovie = subprocess.Popen(['gphoto2', '--set-config', 'movierecordtarget=None'], stdout=subprocess.PIPE)
-            stopMovieStatus = stopMovie.stdout.read()
-            searchObj = re.search( r'error', stopMovieStatus, re.M|re.I )
-
-            # If video is already stopped, then start recording
-            if (searchObj):
-                os.system('gphoto2 --set-config viewfinder=1 --set-config movierecordtarget=Card')
-            else:
-                os.system('gphoto2 --set-config movierecordtarget=None')
+            movie_start_stop()
             print 'Button A pressed'
             time.sleep(button_delay)
 
@@ -187,16 +193,7 @@ while True:
 
     if (buttons & cwiid.BTN_B):
         if mode == 'movie':
-            # Stop video
-            stopMovie = subprocess.Popen(['gphoto2', '--set-config', 'movierecordtarget=None'], stdout=subprocess.PIPE)
-            stopMovieStatus = stopMovie.stdout.read()
-            searchObj = re.search( r'error', stopMovieStatus, re.M|re.I )
-
-            # If video is already stopped, then start recording
-            if (searchObj):
-                os.system('gphoto2 --set-config viewfinder=1 --set-config movierecordtarget=Card')
-            else:
-                os.system('gphoto2 --set-config movierecordtarget=None')
+            movie_start_stop()
             print 'Button A pressed'
             time.sleep(button_delay)
 
